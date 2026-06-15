@@ -1,5 +1,6 @@
 import React from "react";
-import { assets, footer_data } from "../assets/assets";
+import { assets } from "../assets/assets";
+import { footer_data } from "../assets/constants";
 
 const Footer = () => {
   return (
