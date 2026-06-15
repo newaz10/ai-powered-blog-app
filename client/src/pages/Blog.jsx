@@ -10,41 +10,42 @@ import toast from "react-hot-toast";
 
 const Blog = () => {
   const { id } = useParams();
-
   const { axios } = useAppContext();
 
   const [data, setData] = useState(null);
   const [comments, setComments] = useState([]);
-
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
 
-  const fecthBlogData = async () => {
+  const fetchBlogData = async () => {
     try {
       const { data } = await axios.get(`/api/blog/${id}`);
-
-      data.success ? setData(data.blog) : toast.error(data.message);
+      if (data.success) {
+        setData(data.blog);
+      } else {
+        toast.error(data.message);
+      }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.message || "Failed to fetch blog data");
     }
   };
 
   const fetchComments = async () => {
     try {
       const { data } = await axios.post("/api/blog/comments", { blogId: id });
-
       if (data.success) {
         setComments(data.comments);
       } else {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.message || "Failed to fetch comments");
     }
   };
 
   const addComment = async (e) => {
     e.preventDefault();
+    if (!name.trim() || !content.trim()) return;
 
     try {
       const { data } = await axios.post("/api/blog/add-comment", {
@@ -56,20 +57,26 @@ const Blog = () => {
         toast.success(data.message);
         setName("");
         setContent("");
+        fetchComments(); // Refresh comments after adding
       } else {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.message || "Failed to add comment");
     }
   };
 
   useEffect(() => {
-    fecthBlogData();
+    fetchBlogData();
     fetchComments();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]); // Re-fetch when ID changes
 
-  return data ? (
+  if (!data) {
+    return <Loader />;
+  }
+
+  return (
     <div className="relative">
       <img
         src={assets.gradientBackground}
@@ -85,14 +92,15 @@ const Blog = () => {
         <h1 className="text-2xl sm:text-5xl font-semibold max-w-2xl mx-auto text-gray-800">
           {data.title}
         </h1>
-        <h2 className="my-5 max-w-lg turncate mx-auto">{data.subTitle}</h2>
+        <h2 className="my-5 max-w-lg truncate mx-auto">{data.subTitle}</h2>
+
         <p className="inline-block py-1 px-4 rounded-full mb-6 border text-sm border-primary/35 bg-primary/5 font-medium text-primary">
-          purav jha
+          Author: {data.author || "MH Newaz"}
         </p>
       </div>
 
       <div className="mx-5 max-w-5xl md:mx-auto my-10 mt-6">
-        <img src={data.image} alt="" className="rounded-3xl mb-5" />
+        <img src={data.image} alt={data.title} className="rounded-3xl mb-5" />
         <div
           className="rich-text max-w-3xl mx-auto"
           dangerouslySetInnerHTML={{ __html: data.description }}
@@ -113,7 +121,6 @@ const Blog = () => {
                 </div>
                 <p className="text-sm max-w-md ">{item.content}</p>
                 <div className="absolute right-4 bottom-3 flex items-center gap-2 text-xs">
-                  {" "}
                   {Moment(item.createdAt).fromNow()}
                 </div>
               </div>
@@ -159,16 +166,14 @@ const Blog = () => {
             Share this article on social media
           </p>
           <div className="flex">
-            <img src={assets.facebook_icon} width={50} alt="" />
-            <img src={assets.twitter_icon} width={50} alt="" />
-            <img src={assets.googleplus_icon} width={50} alt="" />
+            <img src={assets.facebook_icon} width={50} alt="Facebook" />
+            <img src={assets.twitter_icon} width={50} alt="Twitter" />
+            <img src={assets.googleplus_icon} width={50} alt="Google Plus" />
           </div>
         </div>
       </div>
       <Footer />
     </div>
-  ) : (
-    <Loader />
   );
 };
 
