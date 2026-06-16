@@ -7,7 +7,7 @@ import {
   getAllBlogs,
   getBlogById,
   getBlogComment,
-  togglepublish,
+  togglePublish,
 } from "../controllers/blogController.js";
 import upload from "../middleware/multer.js";
 import auth from "../middleware/auth.js";
@@ -18,7 +18,7 @@ blogRouter.post("/add", upload.single("image"), auth, addBlog);
 blogRouter.get("/all", getAllBlogs);
 blogRouter.get("/:blogId", getBlogById);
 blogRouter.post("/delete", auth, deleteBlogById);
-blogRouter.post("/toggle-publish", auth, togglepublish);
+blogRouter.post("/toggle-publish", auth, togglePublish); // ◄ Change to capital P
 
 blogRouter.post("/add-comment", addComment);
 blogRouter.post("/comments", getBlogComment);
