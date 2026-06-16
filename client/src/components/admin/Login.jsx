@@ -19,7 +19,7 @@ const Login = () => {
         setToken(data.token);
         localStorage.setItem("token", data.token);
         axios.defaults.headers.common["Authorization"] = data.token;
-        toast.success("Login successfully 👍😀😀😀!");
+        toast.success("Login successfully!");
       } else {
         toast.error(data.message);
       }
@@ -51,7 +51,7 @@ const Login = () => {
                 value={email}
                 type="email"
                 required
-                placeholder="Your email id                                                  📩"
+                placeholder="Your email id"
                 className="border-b-2 border-gray-400 p-2 outline-none mb-6 text-blue-700"
               />
             </div>
@@ -62,7 +62,7 @@ const Login = () => {
                 value={password}
                 type="password"
                 required
-                placeholder="Your password                                               🔑"
+                placeholder="Your password"
                 className="border-b-2 border-gray-400 p-2 outline-none mb-6 text-blue-700"
               />
             </div>
