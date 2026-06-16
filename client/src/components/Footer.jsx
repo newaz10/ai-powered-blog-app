@@ -1,41 +1,74 @@
 import React from "react";
-import { assets, footer_data } from "../assets/assets";
+import { Link } from "react-router-dom";
+import { assets } from "../assets/assets";
+import { footer_data } from "../assets/constants";
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <div className="py-4 md:px-16 lg:px-24 xl:px-32 bg-primary/3">
-      <div className="flex flex-col md:flex-row items-start justify-between gap-10 py-10 border-b border-gray-500/30 text-gray-500">
-        <div>
-          <img src={assets.logo} alt="logo" className="w-32 sm:w-44" />
-          <p className="max-w-[410px] mt-6">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Modi,
-            sunt? Debitis veniam accusantium architecto rerum dignissimos quo,
-            non aut recusandae!
-          </p>
+    <div className="bg-primary/5 border-t border-gray-200">
+      <div className="max-w-7xl mx-auto px-6 py-12 md:px-12 lg:px-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+          {/* Brand Section */}
+          <div className="lg:col-span-1">
+            <img
+              src={assets.logo}
+              alt="QuickBlog Logo"
+              className="w-32 sm:w-40 mb-6"
+            />
+            <p className="text-gray-600 text-sm leading-relaxed max-w-xs">
+              A modern AI-powered blogging platform designed for developers,
+              innovators, and tech enthusiasts to share knowledge seamlessly.
+            </p>
+          </div>
+
+          {/* Dynamic Links Sections */}
+          <div className="lg:col-span-3 grid grid-cols-2 md:grid-cols-3 gap-8">
+            {footer_data.map((section, index) => (
+              <div key={index}>
+                <h3 className="font-bold text-gray-900 mb-4 text-base">
+                  {section.title}
+                </h3>
+                <ul className="space-y-3 text-sm text-gray-600">
+                  {section.links.map((link, i) => (
+                    <li key={i}>
+                      {link.external ? (
+                        <a
+                          href={link.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:text-primary transition-colors duration-200 flex items-center gap-1"
+                        >
+                          {link.label}
+                        </a>
+                      ) : (
+                        <Link
+                          to={link.href}
+                          className="hover:text-primary transition-colors duration-200"
+                        >
+                          {link.label}
+                        </Link>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="flex flex-wrap justify-between w-full md:w-[45%] gap-5">
-          {footer_data.map((section, index) => (
-            <div key={index}>
-              <h3 className="font-semibold text-base text-gray-900 md:mb-5 mb-2">
-                {section.title}
-              </h3>
-              <ul className="text-sm space-y-1">
-                {section.links.map((link, i) => (
-                  <li key={i}>
-                    <a href="#" className="hover:underline transition">
-                      {link}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+        {/* Copyright Section */}
+        <div className="mt-12 pt-8 border-t border-gray-200 text-center">
+          <p className="text-sm text-gray-500">
+            © {currentYear}{" "}
+            <span className="font-medium text-gray-700">QuickBlog</span>.
+            Developed by{" "}
+            <span className="font-medium text-gray-700">MH Newaz</span>. All
+            rights reserved.
+          </p>
         </div>
       </div>
-      <p className="py-4 text-center text-sm md:text-base text-gray-600">
-        Copyright 2025 ©️ QuickBlog Developed by Newaz - All Right Reserverd.
-      </p>
     </div>
   );
 };
