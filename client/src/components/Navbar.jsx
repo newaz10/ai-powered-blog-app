@@ -26,7 +26,7 @@ const Navbar = () => {
 
       {/* Navigation Button - kept as button since it toggles based on auth state */}
       <button
-        onClick={() => navigate(token ? "/admin" : "/login")}
+        onClick={() => navigate("/admin")}
         className="flex items-center gap-2 rounded-full text-sm font-medium cursor-pointer bg-primary text-white px-8 py-2.5 hover:bg-primary/90 active:scale-95 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
         aria-label={token ? "Go to Dashboard" : "Go to Login Page"}
       >
